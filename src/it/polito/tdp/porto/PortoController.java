@@ -29,7 +29,13 @@ public class PortoController {
 
     @FXML
     void handleCoautori(ActionEvent event) {
-
+    	
+    	Author ins=boxPrimo.getValue();
+    	if(ins==null){
+    		txtResult.appendText("Seleziona un autore.\n");
+    		return;
+    	}
+    	
     }
 
     @FXML

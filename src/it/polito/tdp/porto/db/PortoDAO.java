@@ -89,4 +89,30 @@ public class PortoDAO {
 			throw new RuntimeException("Errore Db");
 		}
 	}
+
+	public List<Paper> listaArticoliDAO() {
+		
+		List<Paper> listaArticoli=new ArrayList<Paper>();
+		String sql = "SELECT * FROM paper";
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+
+			ResultSet rs = st.executeQuery();
+
+			while(rs.next()) {
+				Paper paper = new Paper(rs.getInt("eprintid"), rs.getString("title"), rs.getString("issn"),
+						rs.getString("publication"), rs.getString("type"), rs.getString("types"));
+				listaArticoli.add(paper);
+			}
+
+			return listaArticoli;
+
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			throw new RuntimeException("Errore Db");
+		}
+	}
+
 }
