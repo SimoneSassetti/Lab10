@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -63,9 +64,31 @@ public class Model {
 	
 	public List<Author> getCoAutoriGrafo(Author a){
 		List<Author> lista=new ArrayList<Author>();
-		
 		lista=Graphs.neighborListOf(grafo, a);
 		return lista;
+	}
+	
+	public List<Author> getAutoriSecondatendina(Author a){
+		List<Author> lista=new ArrayList<Author>();
+		lista.addAll(listaAutori);
+		lista.removeAll(Graphs.neighborListOf(grafo, a));
+		lista.remove(a);
+		return lista;
+	}
+	
+	public List<Paper> getListaArticoli(Author a, Author b){
+		PortoDAO dao=new PortoDAO();
+		DijkstraShortestPath<Author,DefaultEdge> percorsoMinimo= new DijkstraShortestPath<Author,DefaultEdge>(grafo, a,b);
+		
+		List<DefaultEdge> archi=percorsoMinimo.getPathEdgeList();
+		List<Paper> listaArticoli=new ArrayList<Paper>();
+		
+		for(DefaultEdge d: archi){
+			Author sorgente=grafo.getEdgeSource(d);
+			Author dest=grafo.getEdgeTarget(d);
+			listaArticoli.add(dao.getArticoloInComune(sorgente, dest));
+		}
+		return listaArticoli;
 	}
 	
 }

@@ -120,7 +120,7 @@ public class PortoDAO {
 		
 		String sql="SELECT DISTINCT(author.id),author.lastname,author.firstname "+
 					"FROM author, creator as c1, creator as c2 "+
-					"WHERE c1.authorid=? AND c1.eprintid=c2.eprintid AND author.id=c2.authorid AND c2.authorid<>c1.authorid;";
+					"WHERE c1.authorid=? AND c1.eprintid=c2.eprintid AND author.id=c2.authorid AND c2.authorid<>c1.authorid ORDER BY author.lastname;";
 		
 		try {
 			Connection conn = DBConnect.getConnection();
@@ -142,6 +142,33 @@ public class PortoDAO {
 		}
 		
 	}
-	
 
+	public Paper getArticoloInComune(Author sorgente, Author dest) {
+		
+		String sql="SELECT * "+
+					"FROM paper "+
+					"WHERE paper.eprintid IN (SELECT c1.eprintid FROM creator as c1, creator as c2 "+
+											"WHERE c1.authorid=? and c2.authorid=? AND c1.eprintid=c2.eprintid);";
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, sorgente.getId());
+			st.setInt(2, dest.getId());
+			ResultSet rs = st.executeQuery();
+		
+			Paper paper=null;
+			if(rs.next()) {
+				paper = new Paper(rs.getInt("eprintid"), rs.getString("title"), rs.getString("issn"),
+						rs.getString("publication"), rs.getString("type"), rs.getString("types"));
+			}
+			
+			conn.close();
+
+			return paper;
+
+		} catch (SQLException e) {
+			throw new RuntimeException("Errore Db");
+		}
+		
+	}
 }
