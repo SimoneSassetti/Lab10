@@ -18,9 +18,15 @@ public class Author {
 		listaArticoli=new ArrayList<Paper>();
 	}
 
-	public void addArticolo(Paper p){
-		listaArticoli.add(p);
+	
+	public List<Paper> getListaArticoli() {
+		return listaArticoli;
 	}
+	public void setListaArticoli(List<Paper> listaArticoli) {
+		this.listaArticoli = listaArticoli;
+	}
+
+
 	public Paper cercaArticolo(Paper p){
 		return null;
 	}

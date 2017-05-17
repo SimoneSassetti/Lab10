@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.porto.model.Author;
 import it.polito.tdp.porto.model.Model;
+import it.polito.tdp.porto.model.Paper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -36,15 +37,27 @@ public class PortoController {
     		return;
     	}
     	model.getGrafo();
+    	model.creaListaArticoliPerAutore();
     	
     	for(Author a: model.getCoAutoriGrafo(ins)){
     		txtResult.appendText(a.toString()+"\n");
     	}
+    	boxSecondo.getItems().addAll(model.getAutoriSecondatendina(ins));
     }
 
     @FXML
     void handleSequenza(ActionEvent event) {
-
+    	txtResult.clear();
+    	Author ins1=boxPrimo.getValue();
+    	Author ins2=boxSecondo.getValue();
+    	if(ins1==null || ins2==null){
+    		txtResult.appendText("Seleziona un autore.\n");
+    		return;
+    	}
+    	txtResult.appendText("Sequenza di articoli:\n");
+    	for(Paper p: model.getListaArticoli(ins1, ins2)){
+    		txtResult.appendText(p.getTitle()+"\n");
+}
     }
 
     @FXML
@@ -58,6 +71,5 @@ public class PortoController {
 	public void setModel(Model model) {
 		this.model=model;
 		boxPrimo.getItems().addAll(model.getAutori());
-	    boxSecondo.getItems().addAll(model.getAutori());
 	}
 }
