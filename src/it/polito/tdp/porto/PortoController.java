@@ -35,7 +35,11 @@ public class PortoController {
     		txtResult.appendText("Seleziona un autore.\n");
     		return;
     	}
+    	model.getGrafo();
     	
+    	for(Author a: model.getCoAutoriGrafo(ins)){
+    		txtResult.appendText(a.toString()+"\n");
+    	}
     }
 
     @FXML
