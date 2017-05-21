@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import it.polito.tdp.porto.model.Arco;
 import it.polito.tdp.porto.model.Author;
 import it.polito.tdp.porto.model.Paper;
 
@@ -143,7 +144,7 @@ public class PortoDAO {
 		
 	}
 
-	public Paper getArticoloInComune(Author sorgente, Author dest) {
+	public Paper articoloInComune(Author sorgente, Author dest) {
 		
 		String sql="SELECT * "+
 					"FROM paper "+
@@ -160,8 +161,8 @@ public class PortoDAO {
 			if(rs.next()) {
 				paper = new Paper(rs.getInt("eprintid"), rs.getString("title"), rs.getString("issn"),
 						rs.getString("publication"), rs.getString("type"), rs.getString("types"));
+				
 			}
-			
 			conn.close();
 
 			return paper;
@@ -171,4 +172,5 @@ public class PortoDAO {
 		}
 		
 	}
+
 }

@@ -14,9 +14,9 @@ public class Model {
 	
 	private List<Author> listaAutori;
 	private List<Paper> listaArticoli;
-	private Graph<Author, DefaultEdge> grafo;
-	public Model(){
-		
+	private Graph<Author,Arco> grafo;
+	
+	public Model(){	
 	}
 	
 	public List<Author> getAutori(){
@@ -35,7 +35,7 @@ public class Model {
 		return listaArticoli;
 	}
 	
-	public Graph<Author, DefaultEdge> getGrafo(){
+	public Graph<Author, Arco> getGrafo(){
 		if(grafo==null){
 			this.creaGrafo();
 		}
@@ -51,13 +51,15 @@ public class Model {
 	}
 	
 	private void creaGrafo(){
-		grafo=new SimpleGraph<Author, DefaultEdge>(DefaultEdge.class);
+		PortoDAO dao=new PortoDAO();
+		grafo=new SimpleGraph<Author, Arco>(Arco.class);
 		
 		Graphs.addAllVertices(grafo, listaAutori);
 		
 		for(Author a: listaAutori){
 			for(Author co: this.coAutori(a)){
-				grafo.addEdge(a, co);
+				Arco arco=new Arco(dao.articoloInComune(a, co));
+				grafo.addEdge(a, co,arco);
 			}
 		}
 	}
@@ -77,18 +79,14 @@ public class Model {
 	}
 	
 	public List<Paper> getListaArticoli(Author a, Author b){
-		PortoDAO dao=new PortoDAO();
-		DijkstraShortestPath<Author,DefaultEdge> percorsoMinimo= new DijkstraShortestPath<Author,DefaultEdge>(grafo, a,b);
+		DijkstraShortestPath<Author,Arco> percorsoMinimo= new DijkstraShortestPath<Author,Arco>(grafo, a,b);
 		
-		List<DefaultEdge> archi=percorsoMinimo.getPathEdgeList();
+		List<Arco> archi=percorsoMinimo.getPathEdgeList();
 		List<Paper> listaArticoli=new ArrayList<Paper>();
 		
-		for(DefaultEdge d: archi){
-			Author sorgente=grafo.getEdgeSource(d);
-			Author dest=grafo.getEdgeTarget(d);
-			listaArticoli.add(dao.getArticoloInComune(sorgente, dest));
+		for(Arco d: archi){
+			listaArticoli.add(d.getArticolo());
 		}
 		return listaArticoli;
 	}
-	
 }
