@@ -58,7 +58,7 @@ public class Model {
 		
 		for(Author a: listaAutori){
 			for(Author co: this.coAutori(a)){
-				Arco arco=new Arco(dao.articoloInComune(a, co));
+				Arco arco=new Arco(dao.articoliInComune(a, co));
 				grafo.addEdge(a, co,arco);
 			}
 		}

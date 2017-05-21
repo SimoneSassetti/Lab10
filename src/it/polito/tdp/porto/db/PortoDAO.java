@@ -144,7 +144,7 @@ public class PortoDAO {
 		
 	}
 
-	public Paper articoloInComune(Author sorgente, Author dest) {
+	public List<Paper> articoliInComune(Author sorgente, Author dest) {
 		
 		String sql="SELECT * "+
 					"FROM paper "+
@@ -157,11 +157,11 @@ public class PortoDAO {
 			st.setInt(2, dest.getId());
 			ResultSet rs = st.executeQuery();
 		
-			Paper paper=null;
+			List<Paper> paper=new ArrayList<Paper>();
 			if(rs.next()) {
-				paper = new Paper(rs.getInt("eprintid"), rs.getString("title"), rs.getString("issn"),
+				Paper p = new Paper(rs.getInt("eprintid"), rs.getString("title"), rs.getString("issn"),
 						rs.getString("publication"), rs.getString("type"), rs.getString("types"));
-				
+				paper.add(p);
 			}
 			conn.close();
 

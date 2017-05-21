@@ -1,22 +1,22 @@
 package it.polito.tdp.porto.model;
 
+import java.util.List;
+
 import org.jgrapht.graph.DefaultEdge;
 
 public class Arco extends DefaultEdge {
 	
-	private Paper articolo;
+	private List<Paper> listaArticoli;
 
-	public Arco(Paper articolo) {
-		this.articolo = articolo;
+	public Arco(List<Paper> listaArticoli) {
+		super();
+		this.listaArticoli = listaArticoli;
 	}
 
 	public Paper getArticolo() {
-		return articolo;
+		return listaArticoli.get(0);
 	}
-
-	public void setArticolo(Paper articolo) {
-		this.articolo = articolo;
-	}
-	
-	
+	public void setListaArticoli(List<Paper> listaArticoli) {
+		this.listaArticoli = listaArticoli;
+	}	
 }
